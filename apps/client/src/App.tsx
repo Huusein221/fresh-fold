@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+import { Button } from "./components/ui/button";
+import { Calendar } from "./components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./components/ui/popover";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Avatar className="flex justify-end">
+          <AvatarImage src="" />
+          <AvatarFallback>H</AvatarFallback>
+        </Avatar>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div>
+        <h1 className="text-4xl font-bold ">The Smartest Way to Do Laundry</h1>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>
+        <Button className="bg-orange-500 text-white p-3 rounded-full flex items-center justify-center hover:bg-orange-600 focus:outline-none">
+          Send
+        </Button>
+      </div>
+      <div>
+        <Popover>
+          <PopoverTrigger>Open</PopoverTrigger>
+          <PopoverContent>
+            {" "}
+            <Calendar mode="single" />
+          </PopoverContent>
+        </Popover>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
