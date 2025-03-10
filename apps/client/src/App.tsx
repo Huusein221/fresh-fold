@@ -1,38 +1,69 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
-import { Button } from "./components/ui/button";
-import { Calendar } from "./components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./components/ui/popover";
+import { useEffect, useState } from "react";
+
+import { UserForm } from "./components/ui/UserForm";
+const serviceApi = {
+  async getUsers() {
+    const response = await fetch(`http://localhost:3000/user`);
+    const data = await response.json();
+    return data;
+  },
+  async postUser(username: string, address: string) {
+    const response = await fetch(`http://localhost:3000/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, address }),
+    });
+    const data = await response.json();
+    return data;
+  },
+};
 
 function App() {
+  const [, setUser] = useState([]);
+  // const [addressInput, setAddressInput] = useState("");
+  // const [usernameInput, setUsernameInput] = useState("");
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     username: "",
+  //     address: "",
+  //   },
+  // });
+  async function fetchUsers() {
+    const fetchedUsers = await serviceApi.getUsers();
+    setUser(fetchedUsers);
+  }
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // function inputUserChange(event) {
+  //   setUsernameInput(event.target.value);
+  // }
+  // function inputAddressChange(event) {
+  //   setAddressInput(event.target.value);
+  // }
+  // async function handleSubmit(event) {
+  //   event.preventDefault();
+  //   await serviceApi.postUser(usernameInput, addressInput);
+  //   setUsernameInput("");
+  //   setAddressInput("");
+  //   fetchUsers();
+  // }
+
   return (
     <>
-      <div>
-        <Avatar className="flex justify-end">
-          <AvatarImage src="" />
-          <AvatarFallback>H</AvatarFallback>
-        </Avatar>
+      <div className="flex mt-6px ml-6px font-bold">
+        <h1>FreshFold</h1>
       </div>
+
       <div>
         <h1 className="text-4xl font-bold ">The Smartest Way to Do Laundry</h1>
       </div>
-      <div>
-        <Button className="bg-orange-500 text-white p-3 rounded-full flex items-center justify-center hover:bg-orange-600 focus:outline-none">
-          Send
-        </Button>
-      </div>
-      <div>
-        <Popover>
-          <PopoverTrigger>Open</PopoverTrigger>
-          <PopoverContent>
-            {" "}
-            <Calendar mode="single" />
-          </PopoverContent>
-        </Popover>
-      </div>
+
+      <UserForm />
     </>
   );
 }
