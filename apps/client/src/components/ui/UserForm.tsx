@@ -28,6 +28,10 @@ export function UserForm() {
   const { addUser } = useUsers();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      address: "",
+    },
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -75,7 +79,9 @@ export function UserForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Continue</Button>
+        <Button className="cursor-pointer" type="submit">
+          Continue
+        </Button>
       </form>
     </Form>
   );
