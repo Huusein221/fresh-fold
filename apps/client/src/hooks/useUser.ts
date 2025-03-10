@@ -6,7 +6,7 @@ export interface User {
   address: string;
 }
 
-const serviceApi = {
+const UsersApi = {
   async getUsers(): Promise<User[]> {
     const response = await fetch(`http://localhost:3000/user`);
     if (!response.ok) {
@@ -36,7 +36,7 @@ export function useUsers() {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const fetchedUsers = await serviceApi.getUsers();
+      const fetchedUsers = await UsersApi.getUsers();
       setUsers(fetchedUsers);
     } catch (error) {
       console.error("Error in fetchUsers", error);
@@ -50,7 +50,7 @@ export function useUsers() {
   const addUser = useCallback(
     async (username: string, address: string) => {
       try {
-        await serviceApi.postUser(username, address);
+        await UsersApi.postUser(username, address);
         await fetchUsers();
       } catch (error) {
         console.error("Error in addUser", error);

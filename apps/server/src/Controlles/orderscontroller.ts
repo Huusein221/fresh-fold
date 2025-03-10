@@ -15,13 +15,12 @@ export async function ordersPostController(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { serviceType, userId, status, pickupDateTime, deliveryDateTime } =
-    req.body
+  const { serviceType, userId, pickupDateTime, deliveryDateTime } = req.body
   try {
     const orders = await ordersPostModel({
       serviceType,
       userId,
-      status,
+
       pickupDateTime,
       deliveryDateTime,
     })

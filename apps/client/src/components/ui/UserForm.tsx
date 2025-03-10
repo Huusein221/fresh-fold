@@ -8,9 +8,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "./library/form";
-import { Input } from "./library/input";
-import { Button } from "./library/button";
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useUsers } from "../../hooks/useUser";
 
 const formSchema = z.object({

@@ -11,7 +11,7 @@ export async function ordersGetModel() {
 }
 export async function ordersPostModel(data: {
   serviceType: Type
-  status: string
+
   userId: number
   pickupDateTime: Date
   deliveryDateTime: Date
@@ -20,7 +20,7 @@ export async function ordersPostModel(data: {
     const orders = await prisma.order.create({
       data: {
         serviceType: data.serviceType,
-        status: data.status,
+        status: 'pending',
         userId: data.userId,
         pickupDateTime: data.pickupDateTime,
         deliveryDateTime: data.deliveryDateTime,
