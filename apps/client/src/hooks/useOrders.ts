@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 
 export interface Order {
   id: number;
-  status: string;
+  userId: number;
   serviceType: string;
   pickUpDateTime: Date;
   deliveryDateTime: Date;
@@ -20,7 +20,8 @@ const OrdersApi = {
   async postOrder(
     serviceType: string,
     pickUpDateTime: Date,
-    deliveryDateTime: Date
+    deliveryDateTime: Date,
+    userId: number
   ): Promise<Order> {
     const response = await fetch(`http://localhost:3000/order`, {
       method: "POST",
@@ -29,7 +30,8 @@ const OrdersApi = {
       },
       body: JSON.stringify({
         serviceType,
-        pickUpDateTime: pickUpDateTime.toISOString(),
+        userId,
+        pickupDateTime: pickUpDateTime.toISOString(),
         deliveryDateTime: deliveryDateTime.toISOString(),
       }),
     });
@@ -61,13 +63,20 @@ export function useOrders() {
     async (
       serviceType: string,
       pickUpDateTime: Date,
-      deliveryDateTime: Date
+      deliveryDateTime: Date,
+      userId: number
     ) => {
+      console.log("Sending request to add order", {
+        serviceType,
+        pickUpDateTime,
+        deliveryDateTime,
+      });
       try {
         await OrdersApi.postOrder(
           serviceType,
           pickUpDateTime,
-          deliveryDateTime
+          deliveryDateTime,
+          userId
         );
         await fetchOrders();
       } catch (error) {

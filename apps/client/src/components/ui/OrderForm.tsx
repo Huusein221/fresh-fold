@@ -21,7 +21,8 @@ import { Switch } from "../ui/ui/switch";
 import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
-
+import logo from "/Users/hussein/my-turborepo/apps/client/images/FreshFoldExpress.png";
+import { useParams } from "react-router";
 const FormSchema = z.object({
   pickUpDateTime: z.date({
     required_error: "A pickup date is required.",
@@ -31,20 +32,31 @@ const FormSchema = z.object({
 });
 
 export function OrderForm() {
+  const { address, userId } = useParams();
   const { addOrder } = useOrders();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       pickUpDateTime: new Date(),
+      deliveryDateTime: new Date(),
+      serviceType: "Wash",
     },
   });
+  const selectedServiceType = form.watch("serviceType");
+
   const onSubmit: SubmitHandler = async (data) => {
+    console.log("Form submitted:", data);
     try {
-      await addOrder(
-        data.pickUpDateTime,
-        data.deliveryDateTime,
-        data.serviceType
-      );
+      const pickUpDate = new Date(data.pickUpDateTime);
+      const deliveryDate = new Date(data.deliveryDateTime);
+      if (userId) {
+        await addOrder(
+          data.serviceType,
+          pickUpDate,
+          deliveryDate,
+          Number(userId)
+        );
+      }
 
       form.reset();
     } catch (error) {
@@ -54,19 +66,20 @@ export function OrderForm() {
 
   return (
     <>
+      <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
+        <img src={logo} alt="FreshFold Logo" className="h-12 w-auto" />
+      </header>
       <div className="flex flex-col justify-center items-center text-4xl font-bold">
         <h1>Schedule your order</h1>
       </div>
-      <div className="flex flex-col justify-center items-center">
-        <Card>
-          <div>
-            <h2>Address</h2>
-          </div>
+      <div className="flex flex-col justify-center items-center space-y-4 mt-10">
+        <Card className="p-6 shadow-lg rounded-lg bg-white">
+          <h2 className="text-xl font-semibold mb-4">Address</h2>
+          <h3>{address}</h3>
         </Card>
-        <Card>
-          <div>
-            <h2>Pickup</h2>
-          </div>
+        <Card className="p-6 shadow-lg rounded-lg bg-white">
+          <h2 className="text-xl font-semibold mb-4">Pickup</h2>
+
           <div>
             <Form {...form}>
               <form
@@ -77,8 +90,10 @@ export function OrderForm() {
                   control={form.control}
                   name="pickUpDateTime"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>🚚 PICKUP</FormLabel>
+                    <FormItem className="flex flex-col space-y-2">
+                      <FormLabel className="flex items-center space-x-2">
+                        🚚 PICKUP
+                      </FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -118,18 +133,88 @@ export function OrderForm() {
                     </FormItem>
                   )}
                 />
-                <Card>
-                  <div>
-                    <h2>Services</h2>
+                {(selectedServiceType === "Wash" ||
+                  selectedServiceType === "DryClean") && (
+                  <FormField
+                    control={form.control}
+                    name="deliveryDateTime"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col space-y-2">
+                        <FormLabel className="flex items-center space-x-2">
+                          📦 DELIVERY
+                        </FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[240px] pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) => date < new Date()}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormDescription>
+                          Select your desired delivery date.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                <Card className="p-6 shadow-lg rounded-lg bg-white">
+                  <h2 className="text-xl font-semibold mb-4">Services</h2>
+                  <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-2">
-                      <Switch id="Wahs&Fold" />
+                      <Switch
+                        id="Wahs-Fold"
+                        checked={selectedServiceType === "Wash"}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            console.log("switch toggled to wash");
+                            form.setValue("serviceType", "Wash", {
+                              shouldValidate: true,
+                            });
+                          }
+                        }}
+                      />
                       <Label>👔 Wash & Fold</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Switch id="Dry-Clean" />
+                      <Switch
+                        id="Dry-Clean"
+                        checked={selectedServiceType === "DryClean"}
+                        onCheckedChange={(checked) => {
+                          if (checked)
+                            form.setValue("serviceType", "DryClean", {
+                              shouldValidate: true,
+                            });
+                        }}
+                      />
                       <Label>Dry Clean</Label>
                     </div>
-                    <Button className="cursor-pointer">
+                    <Button
+                      type="submit"
+                      className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer"
+                    >
                       Schedule your Order
                     </Button>
                   </div>

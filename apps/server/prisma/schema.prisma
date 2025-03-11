@@ -14,18 +14,18 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
+  id        Int      @id @unique @default(autoincrement())
+  username  String   @unique
   createdAt DateTime @default(now())
   address   String
   orders    Order[]
 }
 
 model Order {
-  id               Int      @id @default(autoincrement())
+  id               Int      @id @unique @default(autoincrement())
   createdAt        DateTime @default(now())
   serviceType      Type     @default(Wash)
-  status           String   @default("pending")
+  status           String?  @default("pending")
   pickupDateTime   DateTime
   deliveryDateTime DateTime
   userId           Int

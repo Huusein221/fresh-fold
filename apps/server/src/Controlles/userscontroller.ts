@@ -11,7 +11,9 @@ export async function usersPostController(req: Request, res: Response) {
   try {
     const users = await userPostModel(username, address)
     if (users) {
-      res.status(201).json({ message: 'user created successfully' })
+      res
+        .status(201)
+        .json({ message: 'user created successfully', user: users })
     } else {
       res.status(400).json({ error: 'Something went wrong' })
     }

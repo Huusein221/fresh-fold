@@ -50,8 +50,9 @@ export function useUsers() {
   const addUser = useCallback(
     async (username: string, address: string) => {
       try {
-        await UsersApi.postUser(username, address);
+        const userCreated = await UsersApi.postUser(username, address);
         await fetchUsers();
+        return userCreated;
       } catch (error) {
         console.error("Error in addUser", error);
       }

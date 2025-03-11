@@ -9,7 +9,7 @@ import {
   ordersPostController,
   ordersGetController,
 } from './Controlles/orderscontroller.js'
-import { postServiceController } from './Controlles/servicecontroller.js'
+// import { postServiceController } from './Controlles/servicecontroller.js'
 
 const app = express()
 app.use(morgan('dev'))
@@ -20,7 +20,6 @@ app.post('/user', usersPostController)
 app.get('/user', userGetController)
 app.post('/order', ordersPostController)
 app.get('/order', ordersGetController)
-app.post('/service', postServiceController)
 
 export default app
 
