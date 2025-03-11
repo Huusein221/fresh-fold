@@ -12,6 +12,8 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useUsers } from "../../hooks/useUser";
+import { Card } from "./ui/card";
+import { Link } from "react-router";
 
 const formSchema = z.object({
   username: z
@@ -37,52 +39,65 @@ export function UserForm() {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       await addUser(data.username, data.address);
-      form.reset(); // Reset form fields upon successful submission
+      form.reset();
     } catch (error) {
       console.error("Submission error", error);
-      // Optionally display a server error message here
     }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your full name" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              {/* <FormMessage>{form.errors.username?.message}</FormMessage> */}
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input placeholder="Insert your address" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display address.
-              </FormDescription>
-              {/* <FormMessage>{errors.address?.message}</FormMessage> */}
-            </FormItem>
-          )}
-        />
-        <Button className="cursor-pointer" type="submit">
-          Continue
-        </Button>
-      </form>
-    </Form>
+    <div className="flex justify-center items-center mt-10.5">
+      <Card>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="w-2xl"
+                      placeholder="Enter your full name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  {/* <FormMessage>{form.errors.username?.message}</FormMessage> */}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="w-2xl"
+                      placeholder="Insert your address"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display address.
+                  </FormDescription>
+                  {/* <FormMessage>{errors.address?.message}</FormMessage> */}
+                </FormItem>
+              )}
+            />
+            <Link to={`/order/`}>
+              <Button className="cursor-pointer" type="submit">
+                Continue
+              </Button>
+            </Link>
+          </form>
+        </Form>
+      </Card>
+    </div>
   );
 }
