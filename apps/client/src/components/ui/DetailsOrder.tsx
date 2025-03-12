@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../ui/ui/table";
 import { useParams } from "react-router";
+import logo from "../../../images/FreshFoldNoBg.png";
 
 interface UserWithOrders {
   user: {
@@ -59,6 +60,9 @@ export function DetailedPage() {
   }, [userId]);
   return (
     <>
+      <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
+        <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+      </header>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <Table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <TableCaption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -69,7 +73,7 @@ export function DetailedPage() {
               <TableHead className="py-3 px-6">Order id</TableHead>
               <TableHead className="py-3 px-6">Status</TableHead>
               <TableHead className="py-3 px-6">Services</TableHead>
-              <TableHead className="py-3 px-6 text-right">Delivery</TableHead>
+              <TableHead className="py-3 px-6">Delivery</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,6 +89,7 @@ export function DetailedPage() {
                 <TableCell className="py-4 px-6">
                   {service.serviceType}
                 </TableCell>
+
                 <TableCell className="py-4 px-6">
                   {service.deliveryDateTime}
                 </TableCell>
