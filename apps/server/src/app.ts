@@ -9,6 +9,7 @@ import {
   ordersPostController,
   ordersGetController,
 } from './Controlles/orderscontroller.js'
+import { serviceGetController } from './Controlles/servicecontroller.js'
 // import { postServiceController } from './Controlles/servicecontroller.js'
 
 const app = express()
@@ -20,7 +21,7 @@ app.post('/user', usersPostController)
 app.get('/user', userGetController)
 app.post('/order', ordersPostController)
 app.get('/order', ordersGetController)
-
+app.get('/service', serviceGetController)
 export default app
 
 // {

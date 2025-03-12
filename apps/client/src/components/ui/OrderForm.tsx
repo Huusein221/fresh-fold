@@ -21,8 +21,8 @@ import { Switch } from "../ui/ui/switch";
 import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
-import logo from "/Users/hussein/my-turborepo/apps/client/images/FreshFoldExpress.png";
-import { useParams } from "react-router";
+import logo from "/Users/hussein/my-turborepo/apps/client/images/FreshFoldNoBg.png";
+import { useNavigate, useParams } from "react-router";
 const FormSchema = z.object({
   pickUpDateTime: z.date({
     required_error: "A pickup date is required.",
@@ -32,6 +32,7 @@ const FormSchema = z.object({
 });
 
 export function OrderForm() {
+  const navigate = useNavigate();
   const { address, userId } = useParams();
   const { addOrder } = useOrders();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -59,6 +60,7 @@ export function OrderForm() {
       }
 
       form.reset();
+      navigate(`/service/${userId}`);
     } catch (error) {
       console.error("Submission error", error);
     }
@@ -67,7 +69,7 @@ export function OrderForm() {
   return (
     <>
       <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
-        <img src={logo} alt="FreshFold Logo" className="h-12 w-auto" />
+        <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
       </header>
       <div className="flex flex-col justify-center items-center text-4xl font-bold">
         <h1>Schedule your order</h1>

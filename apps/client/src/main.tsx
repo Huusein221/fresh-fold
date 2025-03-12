@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { OrderForm } from "./components/ui/OrderForm.tsx";
+import { DetailedPage } from "./components/ui/DetailsOrder.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -11,6 +12,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/order/:userId/:address" element={<OrderForm />} />
+        <Route path="/service/:userId" element={<DetailedPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
