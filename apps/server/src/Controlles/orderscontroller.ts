@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { ordersGetModel, ordersPostModel } from '../Models/ordersmodel'
-
+import moment from 'moment'
 export async function ordersGetController(req: Request, res: Response) {
   try {
     const orders = await ordersGetModel()
@@ -17,12 +17,14 @@ export async function ordersPostController(
 ): Promise<void> {
   const { serviceType, userId, pickupDateTime, deliveryDateTime } = req.body
   console.log('Request Body', req.body)
+  const formattedPickupDateTime = moment(pickupDateTime).toISOString()
+  const formattedDeliveryDateTime = moment(deliveryDateTime).toISOString()
   try {
     const orders = await ordersPostModel({
       serviceType,
       userId,
-      pickupDateTime,
-      deliveryDateTime,
+      pickupDateTime: formattedPickupDateTime,
+      deliveryDateTime: formattedDeliveryDateTime,
     })
     if (orders) {
       res.status(201).json({ message: 'Order created successfully' })

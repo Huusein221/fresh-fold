@@ -10,6 +10,8 @@ import {
 } from "../ui/ui/table";
 import { Link, useParams } from "react-router";
 import logo from "../../../images/FreshFoldNoBg.png";
+import moment from "moment";
+import { CheckIcon } from "lucide-react";
 
 interface UserWithOrders {
   user: {
@@ -41,13 +43,14 @@ const ServiceApi = {
 export function DetailedPage() {
   const { userId } = useParams();
   const [services, setServices] = useState<Service[]>([]);
-
+  const [username, setUsername] = useState<string>("");
   async function fetchServices() {
     if (!userId) return;
     try {
       const fetchedServices = await ServiceApi.getServices(Number(userId));
       console.log("Fetched services:", fetchedServices);
       setServices(fetchedServices.user.orders);
+      setUsername(fetchedServices.user.username);
     } catch (error) {
       console.error("Error in fetchServices", error);
     }
@@ -65,6 +68,20 @@ export function DetailedPage() {
           <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
         </Link>
       </header>
+      <div className="flex flex-col items-center justify-center mt-10 mb-10">
+        <div
+          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline">
+            <CheckIcon className="h-6 w-6 text-green-500 inline mr-2" />
+            Order has been successfully submitted!
+          </span>
+          <span className="block sm:inline mt-2">
+            {`Thank you ${username} for using FreshFold!`}
+          </span>
+        </div>
+      </div>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <Table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <TableCaption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -93,7 +110,7 @@ export function DetailedPage() {
                 </TableCell>
 
                 <TableCell className="py-4 px-6">
-                  {service.deliveryDateTime}
+                  {moment(service.deliveryDateTime).format("LLLL")}
                 </TableCell>
               </TableRow>
             ))}

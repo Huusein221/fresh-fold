@@ -23,6 +23,8 @@ import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
 import logo from "/Users/hussein/my-turborepo/apps/client/images/FreshFoldNoBg.png";
 import { Link, useNavigate, useParams } from "react-router";
+import moment from "moment";
+import { useState } from "react";
 const FormSchema = z.object({
   pickUpDateTime: z.date({
     required_error: "A pickup date is required.",
@@ -47,12 +49,14 @@ export function OrderForm() {
     },
   });
   const selectedServiceType = form.watch("serviceType");
+  const [isWashSelected, setIsWashSelected] = useState(false);
+  const [isDryCleanSelected, setIsDryCleanSelected] = useState(false);
 
   const onSubmit: SubmitHandler = async (data) => {
     console.log("Form submitted:", data);
     try {
-      const pickUpDate = new Date(data.pickUpDateTime);
-      const deliveryDate = new Date(data.deliveryDateTime);
+      const pickUpDate = moment(data.pickUpDateTime).toDate();
+      const deliveryDate = moment(data.deliveryDateTime).toDate();
       if (userId) {
         await addOrder(
           data.serviceType,
@@ -193,8 +197,10 @@ export function OrderForm() {
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="Wahs-Fold"
-                        checked={selectedServiceType === "Wash"}
+                        // checked={selectedServiceType === "Wash"}
+                        checked={isWashSelected}
                         onCheckedChange={(checked) => {
+                          setIsWashSelected(checked);
                           if (checked) {
                             console.log("switch toggled to wash");
                             form.setValue("serviceType", "Wash", {
@@ -208,8 +214,10 @@ export function OrderForm() {
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="Dry-Clean"
-                        checked={selectedServiceType === "DryClean"}
+                        // checked={selectedServiceType === "DryClean"}
+                        checked={isDryCleanSelected}
                         onCheckedChange={(checked) => {
+                          setIsDryCleanSelected(checked);
                           if (checked)
                             form.setValue("serviceType", "DryClean", {
                               shouldValidate: true,
