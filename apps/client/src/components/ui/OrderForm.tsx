@@ -22,13 +22,16 @@ import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
 import logo from "/Users/hussein/my-turborepo/apps/client/images/FreshFoldNoBg.png";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 const FormSchema = z.object({
   pickUpDateTime: z.date({
     required_error: "A pickup date is required.",
   }),
   deliveryDateTime: z.date({ required_error: "A delivery date is required." }),
-  serviceType: z.enum(["Wash", "DryClean", "HangClean"]),
+  serviceType: z.union([
+    z.enum(["Wash", "DryClean", "HangClean"]),
+    z.literal(""),
+  ]),
 });
 
 export function OrderForm() {
@@ -40,7 +43,7 @@ export function OrderForm() {
     defaultValues: {
       pickUpDateTime: new Date(),
       deliveryDateTime: new Date(),
-      serviceType: "Wash",
+      serviceType: "",
     },
   });
   const selectedServiceType = form.watch("serviceType");
@@ -69,7 +72,9 @@ export function OrderForm() {
   return (
     <>
       <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
-        <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        <Link to="/">
+          <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        </Link>
       </header>
       <div className="flex flex-col justify-center items-center text-4xl font-bold">
         <h1>Schedule your order</h1>

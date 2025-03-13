@@ -1,10 +1,13 @@
+import { Link } from "react-router";
 import logo from "../../../images/FreshFoldNoBg.png";
 import { UserForm } from "./UserForm";
 export function Dashboard() {
   return (
     <>
       <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
-        <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        <Link to="/">
+          <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        </Link>
       </header>
       <div className="flex flex-col justify-center items-center text-4xl font-bold">
         <h1>Start your order!</h1>

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/ui/table";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import logo from "../../../images/FreshFoldNoBg.png";
 
 interface UserWithOrders {
@@ -61,7 +61,9 @@ export function DetailedPage() {
   return (
     <>
       <header className="flex items-center mt-1.5 ml-1.5 font-bold text-xl">
-        <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        <Link to="/">
+          <img src={logo} alt="FreshFold Logo" className="h-30 w-auto" />
+        </Link>
       </header>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <Table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
